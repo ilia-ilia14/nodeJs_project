@@ -79,6 +79,7 @@ passport.use(new LocalStrategy(
     }));
 
 passport.serializeUser(function (user, done) {
+
     done(null, user.id);
 });
 
@@ -87,16 +88,13 @@ passport.deserializeUser(function (id, done) {
         done(err, user);
     });
 });
+
 router.post('/login',
     passport.authenticate('local', { successRedirect: '/', failureRedirect: '/users/login', failureFlash: true }),
     function (req, res) {
-        console.log("executed");
-        User.getUsers(function (err, users) {
-            if (err) throw err;
-            console.log(users);
-        });
         res.redirect('/');
     });
+
 router.get('/logout', function(req, res){
 	req.logout();
     req.flash('success_msg', 'You are logged out');

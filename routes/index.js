@@ -1,8 +1,7 @@
 
 var express = require('express');
 var router = express.Router();
-
-
+var User = require('../models/user');
 
 // Get Homepage
 router.get('/', ensureAuthenticated, function(req, res){
@@ -12,6 +11,14 @@ router.get('/', ensureAuthenticated, function(req, res){
 
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
+
+		//GET USERS TO DYSPLAY FOR THE CONVERSATION SELECT
+		if(typeof users === 'undefined' || typeof users === '') {
+		User.getUsers(function (err, users) {
+				if (err) throw err;
+				console.log(users);
+		});
+	}
 		return next();
 	} else {
 		//give error message
