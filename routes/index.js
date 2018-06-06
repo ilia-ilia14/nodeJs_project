@@ -8,15 +8,17 @@ router.get('/', ensureAuthenticated, function(req, res){
 	res.render('index');
 });
 
+let savedUsers = null;
 
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
 
 		//GET USERS TO DYSPLAY FOR THE CONVERSATION SELECT
-		if(typeof users === 'undefined' || typeof users === '') {
+		if(!savedUsers) {
 		User.getUsers(function (err, users) {
 				if (err) throw err;
 				console.log(users);
+				savedUsers = users
 		});
 	}
 		return next();
