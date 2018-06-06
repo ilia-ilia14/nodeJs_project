@@ -18,22 +18,8 @@ var UserSchema = mongoose.Schema({
 		type: String
 	}
 });
-// Messages Schema
-var MessageSchema = mongoose.Schema({
-    from: {
-        type: String
-    },
-    to: {
-        type: String
-    },
-    text: {
-        type: String,
-        index:true
-    }
-});
 
 var User = module.exports = mongoose.model('User', UserSchema);
-//var Messages = module.exports = mongoose.model('Messages', MessageSchema);
 
 module.exports.createUser = function(newUser, callback){
 	bcrypt.genSalt(10, function(err, salt) {
@@ -47,11 +33,14 @@ module.exports.getUserByUsername = function(username, callback){
     var query = {username: username};
     User.findOne(query, callback);
 }
+module.exports.getUsers = function(callback){
+    return User.find(callback);
+
+}
 
 module.exports.getUserById = function(id, callback){
     User.findById(id, callback);
 }
-
 module.exports.comparePassword = function(candidatePassword, hash, callback){
     bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
         if(err) throw err;

@@ -3,12 +3,11 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var io = require('socket.io').listen().sockets;
-
+var io = require('socket.io').listen(4000).sockets;
 
 
 var User = require('../models/user');
-
+var Message = require('../models/message');
 // Register
 router.get('/register',  function(req, res){
 	res.render('register');
@@ -91,6 +90,11 @@ passport.deserializeUser(function (id, done) {
 router.post('/login',
     passport.authenticate('local', { successRedirect: '/', failureRedirect: '/users/login', failureFlash: true }),
     function (req, res) {
+        console.log("executed");
+        User.getUsers(function (err, users) {
+            if (err) throw err;
+            console.log(users);
+        });
         res.redirect('/');
     });
 router.get('/logout', function(req, res){
@@ -107,6 +111,7 @@ router.get('/logout', function(req, res){
 // Connect to Socket.io
 io.on('connection', function(socket){
         let chat = db.collection('chats');
+        let messages = db.collection('messages');
 
         // Create function to send status
         sendStatus = function(s){
@@ -114,6 +119,14 @@ io.on('connection', function(socket){
         }
 
         // Get chats from mongo collection
+    // messages.find().limit(100).sort({_id:1}).toArray(function(err, res){
+    //     if(err){
+    //         throw err;
+    //     }
+    //
+    //     // Emit the messages
+    //     socket.emit('output', res);
+    // });
         chat.find().limit(100).sort({_id:1}).toArray(function(err, res){
             if(err){
                 throw err;
@@ -134,8 +147,9 @@ io.on('connection', function(socket){
                 sendStatus('Please enter a name and message');
             } else {
                 // Insert message
+                messages.insert({sender: name, receiver: 'receiver', text: message, date: Date()});
                 chat.insert({name: name, message: message}, function(){
-                    client.emit('output', [data]);
+                    io.emit('output', [data]);
 
                     // Send status object
                     sendStatus({
