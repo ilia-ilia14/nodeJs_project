@@ -10,6 +10,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
+//
+//var io = require('socket.io').listen(4000).sockets;
 
 mongoose.connect('mongodb://localhost/chatApp', function(err) {
     if (err) throw err;

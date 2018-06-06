@@ -19,7 +19,7 @@ var UserSchema = mongoose.Schema({
 	}
 });
 // Messages Schema
-var messages = mongoose.Schema({
+var MessageSchema = mongoose.Schema({
     from: {
         type: String
     },
@@ -33,6 +33,7 @@ var messages = mongoose.Schema({
 });
 
 var User = module.exports = mongoose.model('User', UserSchema);
+//var Messages = module.exports = mongoose.model('Messages', MessageSchema);
 
 module.exports.createUser = function(newUser, callback){
 	bcrypt.genSalt(10, function(err, salt) {
