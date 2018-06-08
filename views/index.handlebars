@@ -22,8 +22,17 @@
             <textarea id="textarea" class="form-control" placeholder="Enter message..."></textarea>
         </div>
     </div>
-    <div class="col-md-6 offset-md-3 col-sm-12" id="users" style="border:2px solid">
-       <h3>Users</h3>
+    <div class="col-md-3 offset-md-2 col-sm-12" id="users" style="border:2px solid">
+       <h4>Users Online</h4>
+        <div id="activeusers">
+
+        </div>
+    </div>
+    <div class="col-md-3 offset-md-2 col-sm-12" id="users" style="border:2px solid">
+        <h4>User List</h4>
+        <div id="allusers">
+
+        </div>
     </div>
 </div>
 
@@ -65,7 +74,7 @@
            if(socket !== undefined){
                console.log('Connected to socket...');
                // Handle Output
-               socket.on('output', function(data){
+               socket.on('outputChatMessage', function(data){
                   // console.log(data);
                    if(data.length){
                        for(var x = 0;x < data.length;x++){
@@ -80,33 +89,36 @@
                });
 
                // Get active users
+               socket.on('activeUsers', function(activeUsers) {
+                   activeUsers.forEach(function(user) {
+                       var activeuser = document.createElement('p');
+                       activeuser.setAttribute('class', 'users');
+                       activeuser.textContent = user.userName;
+                       activeusers.appendChild(activeuser);
+                       activeusers.insertBefore(activeuser, activeusers.firstChild);
+                   });
+
+
+                   activeUsers.forEach(function(entry) {
+                       console.log(entry.email);
+                   });
+               });
+
+
+
+
                socket.on('users', function(users) {
                  //displayUsers(users);
                  console.log(users);
                  console.log("ran");
                 });
-                /*
-                function displayUsers(users){
-                  var html = '';
-                  for (var i = 0; i < users.length; i++) {
-                    html += '<div class="user" id="user' + users[i].id + '">' + users[i].nick + '</span>';
-                  }
-                  $('#users').append(html);
-                    $('.user').click(function(e){
-                      if (!userToPM) {
-                        $('#pm-col').show();
-                      }
-                      userToPM = $(this).attr('id').substring(4);
-                      $('#user-to-pm').html('<h2>' + $(this).text() + '</h2>');
-                    });
-                }
-*/
 
 
 
 
                // Get Status From Server
                socket.on('status', function(data){
+                   // get message status
                    // get message status
                    setStatus((typeof data === 'object')? data.message : data);
 
@@ -120,7 +132,7 @@
                textarea.addEventListener('keydown', function(event){
                    if(event.which === 13 && event.shiftKey == false){
                        // Emit to server input
-                       socket.emit('input', {
+                       socket.emit('inputChatMessage', {
                            name:username.value,
                            message:textarea.value
                        });
@@ -128,6 +140,17 @@
                        event.preventDefault();
                    }
                })
+
+               socket.on('Allusers', function(allUsers){
+                  console.log(allUsers);
+                   allUsers.forEach(function(eachuser) {
+                       var userPtag = document.createElement('p');
+                       userPtag.setAttribute('class', 'users');
+                       userPtag.textContent = eachuser.username;
+                       allusers.appendChild(userPtag);
+                       allusers.insertBefore(eachuser, allusers.firstChild);
+                   });
+               });
 
                // Handle Chat Clear
                clearBtn.addEventListener('click', function(){

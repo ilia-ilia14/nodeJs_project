@@ -81,7 +81,7 @@ passport.use(new LocalStrategy(
 
 var userobject;
 passport.serializeUser(function (user, done) {
-		this.userobject = user;
+		userobject = user;
     done(null, user.id);
 });
 
@@ -104,19 +104,38 @@ router.get('/logout', function(req, res){
 });
 
 var connectCounter = null;
-var activeUsers = {connectionId:"", userName: "", id: "" };
+
 
 ///////////
 // Connect to Socket.io
 io.on('connection', function(socket){
-	console.log("A Client connected1 " + socket.id + " " + userobject.name);
+    connectCounter++;
+    // GET ACTIVE USERS AND SEND IT TO THE VIEW
+    var activeUsers = [];
+        activeUsers.push({connectionId: socket.id, userName: userobject.username, email: userobject.email})
+        io.emit('activeUsers', activeUsers);
+
+
+
 
 	socket.on('disconnect', function () {
         console.log('user disconnected');
+        activeUsers.splice(activeUsers.findIndex(function(i){
+            return i.id === userobject.username;
+        }), 1);
+        connectCounter--;
+        io.emit('activeUsers', activeUsers);
     });
 
-        let chat = db.collection('chats');
-        let messages = db.collection('messages');
+        let chatMessages = db.collection('chats');
+        let PrivateMessages = db.collection('messages');
+
+    //Update user list evey time new user signs in
+        let users = db.collection('users');
+        users.find().sort({_id:1}).toArray(function(err, res) {
+
+            socket.emit('Allusers', res);
+        });
 
         // Create function to send status
         sendStatus = function(s){
@@ -132,17 +151,18 @@ io.on('connection', function(socket){
     //     // Emit the messages
     //     socket.emit('output', res);
     // });
-        chat.find().limit(100).sort({_id:1}).toArray(function(err, res){
+
+    chatMessages.find().limit(100).sort({_id:1}).toArray(function(err, res){
             if(err){
                 throw err;
             }
 
             // Emit the messages
-            socket.emit('output', res);
+            socket.emit('outputChatMessage', res);
         });
 
-        // Handle input events
-        socket.on('input', function(data){
+        // Handle sendMessage events
+        socket.on('inputChatMessage', function(data){
             let name = data.name;
             let message = data.message;
 
@@ -152,9 +172,17 @@ io.on('connection', function(socket){
                 sendStatus('Please enter a name and message');
             } else {
                 // Insert message
-                messages.insert({sender: name, receiver: 'receiver', text: message, date: Date()});
-                chat.insert({name: name, message: message}, function(){
-                    io.emit('output', [data]);
+                // messages.insert({sender: name, receiver: 'receiver', text: message, date: Date()}, function () {
+                //     io.emit('output', [data]);
+                //
+                //     // Send status object
+                //     sendStatus({
+                //         message: 'Message sent',
+                //         clear: true
+                //     });
+                // });
+                chatMessages.insert({name: name, message: message}, function(){
+                    io.emit('outputChatMessage', [data]);
 
                     // Send status object
                     sendStatus({
@@ -168,7 +196,7 @@ io.on('connection', function(socket){
         // Handle clear
         socket.on('clear', function(data){
             // Remove all chats from collection
-            chat.remove({}, function(){
+            chatMessages.remove({}, function(){
                 // Emit cleared
                 socket.emit('cleared');
             });
