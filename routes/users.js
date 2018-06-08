@@ -70,6 +70,7 @@ passport.use(new LocalStrategy(
             User.comparePassword(password, user.password, function (err, isMatch) {
                 if (err) throw err;
                 if (isMatch) {
+
                     return done(null, user);
                 } else {
                     return done(null, false, { message: 'Invalid password' });
@@ -78,8 +79,9 @@ passport.use(new LocalStrategy(
         });
     }));
 
+var userobject;
 passport.serializeUser(function (user, done) {
-
+		this.userobject = user;
     done(null, user.id);
 });
 
@@ -101,13 +103,18 @@ router.get('/logout', function(req, res){
     res.redirect('/users/login');
 });
 
-
-
-
+var connectCounter = null;
+var activeUsers = {connectionId:"", userName: "", id: "" };
 
 ///////////
 // Connect to Socket.io
 io.on('connection', function(socket){
+	console.log("A Client connected1 " + socket.id + " " + userobject.name);
+
+	socket.on('disconnect', function () {
+        console.log('user disconnected');
+    });
+
         let chat = db.collection('chats');
         let messages = db.collection('messages');
 
@@ -166,6 +173,9 @@ io.on('connection', function(socket){
                 socket.emit('cleared');
             });
         });
+
+
+				//GET ACTIVE USERS AND EMIT TO THE index.handler
     });
 
 

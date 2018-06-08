@@ -3,24 +3,31 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 
+var All_users = null;
 // Get Homepage
 router.get('/', ensureAuthenticated, function(req, res){
-	res.render('index');
+	 User.getUsers(function (err, users) {
+			if (err) throw err;
+			//console.log(users);
+			All_users = users;
+	});
+	res.render('index',{
+        All_users
+    });
+		//console.log(All_users);
 });
 
-let savedUsers = null;
+var savedUsers = null;
 
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
 
 		//GET USERS TO DYSPLAY FOR THE CONVERSATION SELECT
-		if(!savedUsers) {
-		User.getUsers(function (err, users) {
-				if (err) throw err;
-				console.log(users);
-				savedUsers = users
-		});
-	}
+	//	if(!savedUsers) {
+
+
+//	}
+
 		return next();
 	} else {
 		//give error message

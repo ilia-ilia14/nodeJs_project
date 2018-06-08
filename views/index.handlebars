@@ -22,8 +22,8 @@
             <textarea id="textarea" class="form-control" placeholder="Enter message..."></textarea>
         </div>
     </div>
-    <div class="col-md-6 offset-md-3 col-sm-12" style="border:2px solid">
-
+    <div class="col-md-6 offset-md-3 col-sm-12" id="users" style="border:2px solid">
+       <h3>Users</h3>
     </div>
 </div>
 
@@ -64,10 +64,9 @@
            // Check for connection
            if(socket !== undefined){
                console.log('Connected to socket...');
-
                // Handle Output
                socket.on('output', function(data){
-                   //console.log(data);
+                  // console.log(data);
                    if(data.length){
                        for(var x = 0;x < data.length;x++){
                            // Build out message div
@@ -79,6 +78,32 @@
                        }
                    }
                });
+
+               // Get active users
+               socket.on('users', function(users) {
+                 //displayUsers(users);
+                 console.log(users);
+                 console.log("ran");
+                });
+                /*
+                function displayUsers(users){
+                  var html = '';
+                  for (var i = 0; i < users.length; i++) {
+                    html += '<div class="user" id="user' + users[i].id + '">' + users[i].nick + '</span>';
+                  }
+                  $('#users').append(html);
+                    $('.user').click(function(e){
+                      if (!userToPM) {
+                        $('#pm-col').show();
+                      }
+                      userToPM = $(this).attr('id').substring(4);
+                      $('#user-to-pm').html('<h2>' + $(this).text() + '</h2>');
+                    });
+                }
+*/
+
+
+
 
                // Get Status From Server
                socket.on('status', function(data){
@@ -106,6 +131,7 @@
 
                // Handle Chat Clear
                clearBtn.addEventListener('click', function(){
+                 socket.emit('activeUsers');
                    socket.emit('clear');
                });
 
