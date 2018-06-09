@@ -103,28 +103,51 @@ router.get('/logout', function(req, res){
     res.redirect('/users/login');
 });
 
-var connectCounter = null;
 
+var activeUsers = [];
+//HANDLE USERS
+function handleUsers(socket){
+
+var found = false;
+for (var i = activeUsers.length - 1; i >= 0; --i) {
+  if (activeUsers[i].userName === userobject.username) {
+		found = true;
+	}
+}
+	if(!found){
+	console.log("poped in");
+			activeUsers.push({connectionId: socket.id, userName: userobject.username});
+			io.emit('activeUsers', activeUsers);
+		}
+}
+
+function handleClientDisconnections(socket, activeUsers){
+	console.log('user disconnected');
+for (var i = activeUsers.length - 1; i >= 0; --i) {
+    if (activeUsers[i].userName == userobject.username) {
+        activeUsers.splice(i,1);
+					console.log("poped out");
+    }
+}
+	io.emit('activeUsers', activeUsers);
+}
+
+// //PRIVATE MESSAGES
+// function handlePrivateMessaging(socket){
+//   socket.on('private message', function(data){
+//     var from = nicknames[socket.id];
+//     clients[data.userToPM].emit('private message', {from: from, msg: data.msg});
+//   });
+// }
 
 ///////////
 // Connect to Socket.io
 io.on('connection', function(socket){
-    connectCounter++;
     // GET ACTIVE USERS AND SEND IT TO THE VIEW
-    var activeUsers = [];
-        activeUsers.push({connectionId: socket.id, userName: userobject.username, email: userobject.email})
-        io.emit('activeUsers', activeUsers);
-
-
-
+		 handleUsers(socket);
 
 	socket.on('disconnect', function () {
-        console.log('user disconnected');
-        activeUsers.splice(activeUsers.findIndex(function(i){
-            return i.id === userobject.username;
-        }), 1);
-        connectCounter--;
-        io.emit('activeUsers', activeUsers);
+				handleClientDisconnections(socket, activeUsers);
     });
 
         let chatMessages = db.collection('chats');
@@ -141,16 +164,6 @@ io.on('connection', function(socket){
         sendStatus = function(s){
             socket.emit('status', s);
         }
-
-        // Get chats from mongo collection
-    // messages.find().limit(100).sort({_id:1}).toArray(function(err, res){
-    //     if(err){
-    //         throw err;
-    //     }
-    //
-    //     // Emit the messages
-    //     socket.emit('output', res);
-    // });
 
     chatMessages.find().limit(100).sort({_id:1}).toArray(function(err, res){
             if(err){

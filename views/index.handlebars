@@ -97,11 +97,6 @@
                        activeusers.appendChild(activeuser);
                        activeusers.insertBefore(activeuser, activeusers.firstChild);
                    });
-
-
-                   activeUsers.forEach(function(entry) {
-                       console.log(entry.email);
-                   });
                });
 
 
@@ -109,8 +104,8 @@
 
                socket.on('users', function(users) {
                  //displayUsers(users);
-                 console.log(users);
-                 console.log("ran");
+              //   console.log(users);
+              //   console.log("ran");
                 });
 
 
@@ -118,7 +113,6 @@
 
                // Get Status From Server
                socket.on('status', function(data){
-                   // get message status
                    // get message status
                    setStatus((typeof data === 'object')? data.message : data);
 
@@ -131,24 +125,35 @@
                // Handle Input
                textarea.addEventListener('keydown', function(event){
                    if(event.which === 13 && event.shiftKey == false){
+                     if(textarea.value.includes("<-")) {
+                       var messageObject = textarea.value.split('<-');
+                       console.log(messageObject[0]);
+                       socket.emit('privateMessage', {
+                           sender: username.value,
+                           receiver: messageObject[0],
+                           message: messageObject[1]
+                       });
+                     } else {
                        // Emit to server input
                        socket.emit('inputChatMessage', {
                            name:username.value,
                            message:textarea.value
                        });
-
+                     }
+                      textarea.value = '';
                        event.preventDefault();
                    }
                })
 
                socket.on('Allusers', function(allUsers){
-                  console.log(allUsers);
+
                    allUsers.forEach(function(eachuser) {
-                       var userPtag = document.createElement('p');
-                       userPtag.setAttribute('class', 'users');
-                       userPtag.textContent = eachuser.username;
-                       allusers.appendChild(userPtag);
-                       allusers.insertBefore(eachuser, allusers.firstChild);
+                    // console.log(eachuser[0]);
+                        var userPtag = document.createElement('p');
+                        userPtag.setAttribute('class', 'users');
+                        userPtag.textContent = eachuser.username;
+                        allusers.appendChild(userPtag);
+                       allusers.insertBefore(userPtag, allusers.firstChild);
                    });
                });
 
