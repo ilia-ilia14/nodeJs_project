@@ -56,15 +56,8 @@
             </div>
         </div>
         </div>
-    <div class="col-md-3 offset-md-2 col-sm-12" id="users" style="border:2px solid">
-       <h4>Users Online</h4>
-        <div id="activeusers" style="overflow-y:auto;">
-
-        </div>
     </div>
-
-
-    </div>
+    <div id="snackbar"></div>
 </div>
 
 
@@ -135,6 +128,13 @@
 //                   });
 //               });
 
+               socket.on('userOnline', function(userName){
+                       var x = document.getElementById("snackbar");
+                       x.className = "show";
+                       x.innerHTML = userName + " is online";
+                       setTimeout(function(){ x.className = x.className.replace("show", ""); }, 2000);
+               });
+
                // Get Status From Server
                socket.on('status', function(data){
                    // get message status
@@ -175,31 +175,15 @@
                        if (usersonline[i].userName === eachuser.username) {
                            return true;
                        }
-                       console.log("looped");
                    }
                    return false;
                }
-
-               // Get active users
-               socket.on('activeUsers', function(activeUsers) {
-                   var userCount = activeUsers.length +1;
-                   document.getElementById('activeusers').innerHTML = '';
-                   document.getElementById('usercount').innerHTML = userCount;
-
-                   activeUsers.forEach(function(user) {
-                       var activeuser = document.createElement('p');
-                       activeuser.setAttribute('class', 'users');
-                       activeuser.textContent = user.userName;
-                       activeusers.appendChild(activeuser);
-                       activeusers.insertBefore(activeuser, activeusers.firstChild);
-                   });
-               });
                socket.on('Allusers', function(usersonline, allUsers){
                    var userStatus = "Offline";
                    //console.log(usersonline);
                    var userCount = allUsers.length;
                    document.getElementById('usercount').innerHTML = userCount;
-
+                   document.getElementById('allusers').innerHTML = '';
                    allUsers.forEach(function(eachuser) {
                     // console.log(eachuser[0]);
 
@@ -208,8 +192,6 @@
                      //var onlineUserName = obj.userName;
                        if(isOnline) {
                            userStatus = "Online";
-                           console.log(eachuser.username + " 2")
-                          // console.log(onlineUserName +" isOnline?");
                        } else { userStatus = "Offline"; }
 
                        var hrTag = document.createElement('tr');
@@ -224,7 +206,9 @@
                        var tdTag1 = document.createElement('td');
                        tdTag1.setAttribute('class', 'text-r');
                        var spanTag = document.createElement('span');
-                       spanTag.setAttribute('class', 'label label-primary');
+                       if(isOnline) {
+                           spanTag.setAttribute('class', 'label label-primary');
+                       } else { spanTag.setAttribute('class', 'label label-warning'); }
                        spanTag.textContent = userStatus;
                        tdTag1.append(spanTag);
                        hrTag.append(tdTag);

@@ -120,8 +120,10 @@ function handleUsers(socket, activeUsers, allusers){
     if(!found){
         console.log("poped in");
         activeUsers.push({connectionId: socket.id, userName: userobject.username});
-        io.emit('activeUsers', activeUsers);
-       // io.emit('Allusers', allUsers, activeUsers);
+        io.emit('userOnline', userobject.username);
+        console.log('user online');
+        console.log(activeUsers);
+        console.log("END!");
     }
 }
 
@@ -133,8 +135,9 @@ function handleClientDisconnections(socket, activeUsers, allUsers){
             console.log("poped out");
         }
     }
-    io.emit('activeUsers', activeUsers);
-    io.emit('Allusers', allUsers, activeUsers);
+    console.log(activeUsers);
+    console.log("HERE");
+    return activeUsers;
 }
 
 function hanglePrivateMessages(data, privateMessages) {
@@ -195,23 +198,34 @@ function getPrivateMessages() {
 // Connect to Socket.io
 io.on('connection', function(socket){
 
-    // GET ACTIVE USERS AND SEND IT TO THE VIEW
-    handleUsers(socket, activeUsers);
-
-    socket.on('disconnect', function () {
-        handleClientDisconnections(socket, activeUsers);
-    });
-
-
-    let chatMessages = db.collection('chats');
-    let PrivateMessages = db.collection('messages');
-
     //Update user list evey time new user signs in
     let users = db.collection('users');
     users.find().sort({_id:1}).toArray(function(err, res) {
 
-        socket.emit('Allusers', activeUsers, res);
+        //  socket.emit('Allusers', activeUsers, res);
+        io.emit('Allusers', activeUsers, res);
+        console.log(activeUsers );
+        console.log("END");
     });
+
+    socket.on('disconnect', function () {
+       activeUsers =  handleClientDisconnections(socket, activeUsers);
+        users.find().sort({_id:1}).toArray(function(err, res) {
+
+            //  socket.emit('Allusers', activeUsers, res);
+            io.emit('Allusers', activeUsers, res);
+            console.log(activeUsers);
+            console.log("end1");
+        });
+
+    });
+
+    // GET ACTIVE USERS AND SEND IT TO THE VIEW
+    handleUsers(socket, activeUsers);
+
+
+    let chatMessages = db.collection('chats');
+    let PrivateMessages = db.collection('messages');
 
 
     // Create function to send status
