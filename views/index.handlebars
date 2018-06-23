@@ -1,17 +1,17 @@
-<h2 class="page-header">Dashboard</h2>
-<p>Welcome to the chetroom application</p>
+<h4 class="page-header">Dashboard</h4>
 <style>
     #messages{height:300px;}
+    #privatemsgs{height:250px;}
+    #privatemsgs{height:300px;}
 </style>
 <div class="row">
-    <div class="col-md-6 offset-md-3 col-sm-12">
-        <h1 class="text-center">
-            MongoChat
-            <button id="clear" class="btn btn-danger">Clear</button>
-        </h1>
+    <div class="col-md-12 offset-md-12 col-sm-12">
+
+        <div class="col-md-4 offset-md-3 col-sm-8">
         <div id="status"></div>
-        <div id="chat">
-            <input type="text" id="username" class="form-control" placeholder="Enter name..." value='{{{user.name}}}'>
+        <div>
+        <div id="chat" style="overflow-y:auto" >
+            <input type="text" id="username" class="form-control" disabled value='{{{user.name}}}'>
             <br>
             <div class="card">
                 <div id="messages" class="card-block">
@@ -19,20 +19,51 @@
                 </div>
             </div>
             <br>
+
+        </div>
             <textarea id="textarea" class="form-control" placeholder="Enter message..."></textarea>
+            <button id="clear" class="btn btn-danger">Clear</button>
         </div>
     </div>
+        <div>
+        <div class="col-md-3 offset-md-2 col-sm-12 border border-info" id="users" >
+            <!-- Start Files -->
+
+                <div class="panel panel-widget">
+                    <div class="panel-title text-center">
+                        User List <span id="usercount" class="badge">0</span>
+                    </div>
+                    <div class="panel-body table-responsive" >
+
+                        <table class="table table-dic table-hover ">
+                            <tbody id="allusers" style="overflow-y:auto">
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+            <!-- End Files -->
+            <div id="privateMsgs" class="card-block" >
+                <div class="panel-title text-center">
+                    Private Messages</span>
+                </div>
+                <div id="privatemsgs" style="overflow-y:auto;">
+                    <!-- private messages lookped in here -->
+                </div>
+            </div>
+        </div>
+        </div>
     <div class="col-md-3 offset-md-2 col-sm-12" id="users" style="border:2px solid">
        <h4>Users Online</h4>
-        <div id="activeusers">
+        <div id="activeusers" style="overflow-y:auto;">
 
         </div>
     </div>
-    <div class="col-md-3 offset-md-2 col-sm-12" id="users" style="border:2px solid">
-        <h4>User List</h4>
-        <div id="allusers">
 
-        </div>
+
     </div>
 </div>
 
@@ -88,28 +119,21 @@
                    }
                });
 
-               // Get active users
-               socket.on('activeUsers', function(activeUsers) {
-                   activeUsers.forEach(function(user) {
-                       var activeuser = document.createElement('p');
-                       activeuser.setAttribute('class', 'users');
-                       activeuser.textContent = user.userName;
-                       activeusers.appendChild(activeuser);
-                       activeusers.insertBefore(activeuser, activeusers.firstChild);
-                   });
-               });
 
 
-
-
-               socket.on('users', function(users) {
-                 //displayUsers(users);
-              //   console.log(users);
-              //   console.log("ran");
-                });
-
-
-
+//               socket.on('broadcastPrivateMsg', function(data){
+//                   console.log(data +" in index");
+//               });
+//               socket.on('broadcastPrivateMsgs', function(data){
+//                   console.log(eachdata);
+//                   data.forEach(function(eachdata) {
+//                       var messageTag = document.createElement('div');
+//                       messageTag.setAttribute('class', 'chat-message');
+//                       messageTag.textContent = eachdata.sender+": "+eachdata.text +" -> " +eachdata.receiver;
+//                       privatemsgs.appendChild(messageTag);
+//                       privatemsgs.insertBefore( messageTag, privatemsgs.firstChild);
+//                   });
+//               });
 
                // Get Status From Server
                socket.on('status', function(data){
@@ -126,13 +150,12 @@
                textarea.addEventListener('keydown', function(event){
                    if(event.which === 13 && event.shiftKey == false){
                      if(textarea.value.includes("<-")) {
-                       var messageObject = textarea.value.split('<-');
-                       console.log(messageObject[0]);
-                       socket.emit('privateMessage', {
-                           sender: username.value,
-                           receiver: messageObject[0],
-                           message: messageObject[1]
-                       });
+//                       var messageObject = textarea.value.split('<-');
+//                       socket.emit('sendPrivateMessage', {
+//                           sender: username.value,
+//                           receiver: messageObject[0].replace(/\s+/, ""),
+//                           privateMessage: messageObject[1].replace(/\s+/, "")
+//                       });
                      } else {
                        // Emit to server input
                        socket.emit('inputChatMessage', {
@@ -145,18 +168,75 @@
                    }
                })
 
-               socket.on('Allusers', function(allUsers){
+
+               //CHECKS IF USER IS ONLINE
+               function isUserOnline(usersonline, eachuser) {
+                   for (var i = 0; i < usersonline.length; i++) {
+                       if (usersonline[i].userName === eachuser.username) {
+                           return true;
+                       }
+                       console.log("looped");
+                   }
+                   return false;
+               }
+
+               // Get active users
+               socket.on('activeUsers', function(activeUsers) {
+                   var userCount = activeUsers.length +1;
+                   document.getElementById('activeusers').innerHTML = '';
+                   document.getElementById('usercount').innerHTML = userCount;
+
+                   activeUsers.forEach(function(user) {
+                       var activeuser = document.createElement('p');
+                       activeuser.setAttribute('class', 'users');
+                       activeuser.textContent = user.userName;
+                       activeusers.appendChild(activeuser);
+                       activeusers.insertBefore(activeuser, activeusers.firstChild);
+                   });
+               });
+               socket.on('Allusers', function(usersonline, allUsers){
+                   var userStatus = "Offline";
+                   //console.log(usersonline);
+                   var userCount = allUsers.length;
+                   document.getElementById('usercount').innerHTML = userCount;
 
                    allUsers.forEach(function(eachuser) {
                     // console.log(eachuser[0]);
-                        var userPtag = document.createElement('p');
-                        userPtag.setAttribute('class', 'users');
-                        userPtag.textContent = eachuser.username;
-                        allusers.appendChild(userPtag);
-                       allusers.insertBefore(userPtag, allusers.firstChild);
+
+//                     var obj = usersonline.findIndex(o => o.userName === eachuser.username);
+                       var isOnline = isUserOnline(usersonline, eachuser)
+                     //var onlineUserName = obj.userName;
+                       if(isOnline) {
+                           userStatus = "Online";
+                           console.log(eachuser.username + " 2")
+                          // console.log(onlineUserName +" isOnline?");
+                       } else { userStatus = "Offline"; }
+
+                       var hrTag = document.createElement('tr');
+                       var tdTag = document.createElement('td');
+                       var iTag = document.createElement('i');
+                       iTag.setAttribute('class', 'fas fa-user');
+
+                       tdTag.append(iTag);
+                       tdTag.append(eachuser.username);
+
+
+                       var tdTag1 = document.createElement('td');
+                       tdTag1.setAttribute('class', 'text-r');
+                       var spanTag = document.createElement('span');
+                       spanTag.setAttribute('class', 'label label-primary');
+                       spanTag.textContent = userStatus;
+                       tdTag1.append(spanTag);
+                       hrTag.append(tdTag);
+                       hrTag.append(tdTag1);
+                       allusers.insertBefore(hrTag, allusers.firstChild);
                    });
                });
 
+//           <tr>
+//               <td><i class="fa fa-folder-o"></i>Projects</td>
+//                       <td class="text-r "> <span class="label label-primary">Onliine</span></td>
+//                       </tr>
                // Handle Chat Clear
                clearBtn.addEventListener('click', function(){
                  socket.emit('activeUsers');

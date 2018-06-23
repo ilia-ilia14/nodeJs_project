@@ -25,5 +25,15 @@ var Message = module.exports = mongoose.model('Message', MessageSchema);
 module.exports.insert = function(newMessage, callback){
     newMessage.insert(callback);
 }
-module.exports.find = function() {
+module.exports.findMsgsReceived = function(receiver, callback){
+    var query = {receiver: receiver};
+    Message.find(query, callback);
+}
+module.exports.findMsgsSent = function(sender, callback){
+    var query = {sender: sender};
+    Message.find(query, callback);
+}
+module.exports.getMsgs = function(userName, callback){
+    var query = {$or: [{sender: userName}, {receiver: userName}]}
+    Message.find(query, callback).limit(110).sort({date:1});
 }
