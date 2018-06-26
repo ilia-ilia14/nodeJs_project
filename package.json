@@ -22,7 +22,7 @@
     "mongodb": "*",
     "mongoose": "*",
     "passport": "*",
-    "passport-https": "*",
+    "passport-http": "*",
     "passport-local": "*",
     "socket.io": "*"
   }
