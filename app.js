@@ -11,10 +11,15 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 global.db
-mongoose.connect('mongodb://localhost/chatApp', function(err) {
+// mongoose.connect('mongodb://localhost/chatApp', function(err) {
+//     if (err) throw err;
+//     else {  db = mongoose.connection; }
+// });
+mongoose.connect('mongodb://Ilia:ilia-ilia14@ds119171.mlab.com:19171/chat_application', function(err) {
     if (err) throw err;
     else {  db = mongoose.connection; }
 });
+
 
 var routes = require('./routes/index');
 var users = require('./routes/users');

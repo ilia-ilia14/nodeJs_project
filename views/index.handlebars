@@ -65,6 +65,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 
    <script>
+//       if (window.performance.navigation.type == 1) {
+//           window.location.replace("/users/logout");
+//       }
        (function(){
            var element = function(id){
                return document.getElementById(id);
@@ -114,11 +117,11 @@
 
 
 
-//               socket.on('broadcastPrivateMsg', function(data){
-//                   console.log(data +" in index");
-//               });
+               socket.on('broadcastPrivateMsg', function(data){
+                   console.log(data +" in index");
+               });
 //               socket.on('broadcastPrivateMsgs', function(data){
-//                   console.log(eachdata);
+//                  // console.log(eachdata);
 //                   data.forEach(function(eachdata) {
 //                       var messageTag = document.createElement('div');
 //                       messageTag.setAttribute('class', 'chat-message');

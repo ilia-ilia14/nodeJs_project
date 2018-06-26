@@ -21,13 +21,6 @@ var savedUsers = null;
 
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
-
-		//GET USERS TO DYSPLAY FOR THE CONVERSATION SELECT
-	//	if(!savedUsers) {
-
-
-//	}
-
 		return next();
 	} else {
 		//give error message

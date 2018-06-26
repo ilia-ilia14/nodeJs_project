@@ -145,6 +145,7 @@ function hanglePrivateMessages(data, privateMessages) {
     let receiver = data.receiver;
     let privateMsg = data.privateMessage;
 
+    console.log(data);
     let receiverObject = activeUsers.find(o => o.userName === receiver);
     let senderObject = activeUsers.find(o => o.userName === sender);
 
