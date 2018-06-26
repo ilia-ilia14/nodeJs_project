@@ -6,7 +6,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var io = require('socket.io').listen(4000).sockets;
+var io = require('socket.io').listen('https://afternoon-ocean-62570.herokuapp.com/').sockets;
 
 
 var User = require('../models/user');
