@@ -7,7 +7,7 @@ var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var server = require('https').Server(express);
-var io = require('socket.io').listen('157.201.106.20').sockets;
+var io = require('socket.io').listen('4000').sockets;
 console.log(server.port +"**");
 
 
