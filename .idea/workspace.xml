@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48f8e143-6d91-44ec-a374-fd1ce8f8d151" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.handlebars" afterPath="$PROJECT_DIR$/views/index.handlebars" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -43,8 +43,8 @@
       <file leaf-file-name="index.handlebars" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/index.handlebars">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="99" column="79" lean-forward="false" selection-start-line="99" selection-start-column="79" selection-end-line="99" selection-end-column="79" />
+            <state relative-caret-position="85">
+              <caret line="96" column="34" lean-forward="true" selection-start-line="96" selection-start-column="34" selection-end-line="96" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -371,7 +371,7 @@
       <workItem from="1529786784983" duration="68000" />
       <workItem from="1529858264052" duration="7932000" />
       <workItem from="1529957518308" duration="634000" />
-      <workItem from="1530033852067" duration="4857000" />
+      <workItem from="1530033852067" duration="5297000" />
     </task>
     <task id="LOCAL-00001" summary="trying to fix the structure">
       <created>1528298245789</created>
@@ -433,7 +433,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="118307000" />
+    <option name="totallyTimeSpent" value="118747000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -885,8 +885,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/index.handlebars">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="99" column="79" lean-forward="false" selection-start-line="99" selection-start-column="79" selection-end-line="99" selection-end-column="79" />
+        <state relative-caret-position="85">
+          <caret line="96" column="34" lean-forward="true" selection-start-line="96" selection-start-column="34" selection-end-line="96" selection-end-column="34" />
           <folding />
         </state>
       </provider>
