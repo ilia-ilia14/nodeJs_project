@@ -8,6 +8,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var server = require('https').Server(express);
 var io = require('socket.io').listen(4000).sockets;
+console.log(server +"**");
 
 
 var User = require('../models/user');
