@@ -122,16 +122,16 @@
                socket.on('broadcastPrivateMsg', function(data){
                    console.log(data +" in index");
                });
-//               socket.on('broadcastPrivateMsgs', function(data){
-//                  // console.log(eachdata);
-//                   data.forEach(function(eachdata) {
-//                       var messageTag = document.createElement('div');
-//                       messageTag.setAttribute('class', 'chat-message');
-//                       messageTag.textContent = eachdata.sender+": "+eachdata.text +" -> " +eachdata.receiver;
-//                       privatemsgs.appendChild(messageTag);
-//                       privatemsgs.insertBefore( messageTag, privatemsgs.firstChild);
-//                   });
-//               });
+               socket.on('broadcastPrivateMsgs', function(data){
+                  // console.log(eachdata);
+                   data.forEach(function(eachdata) {
+                       var messageTag = document.createElement('div');
+                       messageTag.setAttribute('class', 'chat-message');
+                       messageTag.textContent = eachdata.sender+": "+eachdata.text +" -> " +eachdata.receiver;
+                       privatemsgs.appendChild(messageTag);
+                       privatemsgs.insertBefore( messageTag, privatemsgs.firstChild);
+                   });
+               });
 
                socket.on('userOnline', function(userName){
                        var x = document.getElementById("snackbar");
@@ -155,12 +155,12 @@
                textarea.addEventListener('keydown', function(event){
                    if(event.which === 13 && event.shiftKey == false){
                      if(textarea.value.includes("<-")) {
-//                       var messageObject = textarea.value.split('<-');
-//                       socket.emit('sendPrivateMessage', {
-//                           sender: username.value,
-//                           receiver: messageObject[0].replace(/\s+/, ""),
-//                           privateMessage: messageObject[1].replace(/\s+/, "")
-//                       });
+                       var messageObject = textarea.value.split('<-');
+                       socket.emit('sendPrivateMessage', {
+                           sender: username.value,
+                           receiver: messageObject[0].replace(/\s+/, ""),
+                           privateMessage: messageObject[1].replace(/\s+/, "")
+                       });
                      } else {
                        // Emit to server input
                        socket.emit('inputChatMessage', {
