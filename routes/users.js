@@ -1,13 +1,22 @@
 /**
  * Created by Simon on 6/10/2018.
  */
+var app = require('../app');
+let http = require('http');
+
+var port = process.env.PORT || 3000;
+app.set('port', port);
+
+
+let server = http.createServer(app);
+server.listen(port);
+let io = require('socket.io').listen(server);
 
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var server = require('https').Server(express);
-var io = require('socket.io').listen('4000').sockets;
+
 
 
 var User = require('../models/user');
