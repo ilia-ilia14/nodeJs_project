@@ -14,7 +14,6 @@ router.get('/', ensureAuthenticated, function(req, res){
 	res.render('index',{
         All_users
     });
-		//console.log(All_users);
 });
 
 var savedUsers = null;
