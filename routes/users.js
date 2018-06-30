@@ -37,44 +37,41 @@ router.get('/login',  function(req, res){
 });
 
 
+function isEmpty(obj) {
+    console.log(obj);
+    if(obj === undefined){
+        console.log(obj);
+        return true;
+    }
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
 // Register User
 router.post('/register', function (req, res) {
     var name = req.body.name;
     var email = req.body.email;
-    var username = req.body.username;
+    var username = req.body.email;
     var password = req.body.password;
     var password2 = req.body.password2;
-
     // Validation
     req.checkBody('name', 'Name is required').notEmpty();
     req.checkBody('email', 'Email is required').notEmpty();
     req.checkBody('email', 'Email is not valid').isEmail();
-    req.checkBody('username', 'Username is required').notEmpty();
+    req.checkBody('email', 'Username is required').notEmpty();
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
     // req.check("password", "password").matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, "i");
     req.check("password", "password should be at least 8 caracters").matches(/^(?=.*\d)[0-9a-zA-Z]{8,}$/, "i");
 
-    // let users = db.collection('users');
-    // users.find({$or: [{username: username }, {email: email}] },
-    //     function(err, users){
-    //         if(err) {
-    //
-    //             return next(err);
-    //         } else if(users) {
-    //             if (users.find(users , {email: email})){
-    //                 req.invalidate("email is already registered");
-    //             }
-    //             else if (users.find(users , {username: username})){
-    //                 req.invalidate('username', 'username is already taken');
-    //             }
-    //         }
-    //         else{
-    //             next();
-    //         }
-    //     })
-
-
+    /** CKECK IF USER EXISTS  NEEDS TO BE WORKED ON */
+    console.log(User.getUserByEmail(email) +" user*** " + email);
+    if(!isEmpty(User.getUserByEmail(email))){
+        var empty = '';
+        req.checkBody('empty', 'Username/Email is already taken').notEmpty();
+    }
 
     var errors = req.validationErrors();
 
@@ -91,7 +88,7 @@ router.post('/register', function (req, res) {
         });
         User.createUser(newUser, function (err, user) {
             if (err) throw err;
-            console.log(user);
+            // console.log(user);
         });
 
         req.flash('success_msg', 'Registration successful, please log in');
