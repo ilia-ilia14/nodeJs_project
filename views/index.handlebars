@@ -123,7 +123,7 @@
                    console.log(data +" in index");
                });
                socket.on('broadcastPrivateMsgs', function(data){
-                  // document.getElementById('privatemsgs').innerHTML = "";
+                   document.getElementById("privatemsgs").innerHTML = "";
                   // console.log(eachdata);
                    data.forEach(function(eachdata) {
                        var messageTag = document.createElement('div');

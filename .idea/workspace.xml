@@ -43,8 +43,8 @@
       <file leaf-file-name="index.handlebars" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/index.handlebars">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="125" column="20" lean-forward="false" selection-start-line="125" selection-start-column="20" selection-end-line="125" selection-end-column="20" />
+            <state relative-caret-position="165">
+              <caret line="124" column="64" lean-forward="false" selection-start-line="124" selection-start-column="64" selection-end-line="124" selection-end-column="64" />
               <folding />
             </state>
           </provider>
@@ -373,7 +373,7 @@
       <workItem from="1529957518308" duration="634000" />
       <workItem from="1530033852067" duration="17072000" />
       <workItem from="1530308044897" duration="4633000" />
-      <workItem from="1530314778088" duration="2226000" />
+      <workItem from="1530314778088" duration="2336000" />
     </task>
     <task id="LOCAL-00001" summary="trying to fix the structure">
       <created>1528298245789</created>
@@ -442,7 +442,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="137381000" />
+    <option name="totallyTimeSpent" value="137491000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -895,8 +895,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/index.handlebars">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="125" column="20" lean-forward="false" selection-start-line="125" selection-start-column="20" selection-end-line="125" selection-end-column="20" />
+        <state relative-caret-position="165">
+          <caret line="124" column="64" lean-forward="false" selection-start-line="124" selection-start-column="64" selection-end-line="124" selection-end-column="64" />
           <folding />
         </state>
       </provider>
