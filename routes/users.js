@@ -4,6 +4,7 @@
 var app = require('../app');
 let http = require('http');
 
+
 var port = process.env.PORT || 3000;
 app.set('port', port);
 
@@ -51,6 +52,29 @@ router.post('/register', function (req, res) {
     req.checkBody('username', 'Username is required').notEmpty();
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
+    // req.check("password", "password").matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, "i");
+    req.check("password", "password should be at least 8 caracters").matches(/^(?=.*\d)[0-9a-zA-Z]{8,}$/, "i");
+
+    // let users = db.collection('users');
+    // users.find({$or: [{username: username }, {email: email}] },
+    //     function(err, users){
+    //         if(err) {
+    //
+    //             return next(err);
+    //         } else if(users) {
+    //             if (users.find(users , {email: email})){
+    //                 req.invalidate("email is already registered");
+    //             }
+    //             else if (users.find(users , {username: username})){
+    //                 req.invalidate('username', 'username is already taken');
+    //             }
+    //         }
+    //         else{
+    //             next();
+    //         }
+    //     })
+
+
 
     var errors = req.validationErrors();
 
@@ -74,6 +98,7 @@ router.post('/register', function (req, res) {
         res.redirect('/users/login');
     }
 });
+
 
 passport.use(new LocalStrategy(
     function (username, password, done) {
@@ -103,6 +128,7 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(function (id, done) {
     User.getUserById(id, function (err, user) {
+        userobject = user;
         done(err, user);
     });
 });
@@ -122,7 +148,7 @@ router.get('/logout', function(req, res){
 
 var activeUsers = [];
 //HANDLE USERS
-function handleUsers(socket, activeUsers, allusers){
+function handleUsers(socket, activeUsers){
     var found = false;
     for (var i = activeUsers.length - 1; i >= 0; --i) {
         if (activeUsers[i].userName === userobject.username) {
@@ -148,7 +174,6 @@ function handleClientDisconnections(socket, activeUsers, allUsers){
         }
     }
     console.log(activeUsers);
-    console.log("HERE");
     return activeUsers;
 }
 
