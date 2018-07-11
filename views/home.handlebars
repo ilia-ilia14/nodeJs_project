@@ -4,8 +4,11 @@
         <p>A new way to chat with your friends</p>
         <p>Create an account today and start chatting</p>
 {{#if user}}
-        <a type="button" class="btn btn-lg btn-primary" href="/users/register">Get Started </a>
+    <a type="button" class="btn btn-lg btn-primary" href="#" disabled>Get Started </a>
+{{else }}
+    <a type="button" class="btn btn-lg btn-primary" href="/users/register">Get Started </a>
 {{/if}}
+
     </div>
 </div>
 <div class="container">

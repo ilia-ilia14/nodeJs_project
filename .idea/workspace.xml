@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="48f8e143-6d91-44ec-a374-fd1ce8f8d151" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/home.handlebars" afterPath="$PROJECT_DIR$/views/home.handlebars" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -37,7 +36,7 @@
         <entry file="file://$PROJECT_DIR$/views/home.handlebars">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
-              <caret line="6" column="67" lean-forward="true" selection-start-line="6" selection-start-column="67" selection-end-line="6" selection-end-column="67" />
+              <caret line="6" column="69" lean-forward="false" selection-start-line="6" selection-start-column="69" selection-end-line="6" selection-end-column="69" />
               <folding />
             </state>
           </provider>
@@ -46,8 +45,8 @@
       <file leaf-file-name="layout.handlebars" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/layouts/layout.handlebars">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="20" column="13" lean-forward="true" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="21" />
+            <state relative-caret-position="85">
+              <caret line="17" column="25" lean-forward="true" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -432,7 +431,7 @@
       <workItem from="1531251686014" duration="12299000" />
       <workItem from="1531294349452" duration="1408000" />
       <workItem from="1531318836307" duration="6228000" />
-      <workItem from="1531339308922" duration="1474000" />
+      <workItem from="1531339308922" duration="1597000" />
     </task>
     <task id="LOCAL-00001" summary="trying to fix the structure">
       <created>1528298245789</created>
@@ -543,7 +542,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="205303000" />
+    <option name="totallyTimeSpent" value="205426000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1019,8 +1018,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/layouts/layout.handlebars">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="20" column="13" lean-forward="true" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="21" />
+        <state relative-caret-position="85">
+          <caret line="17" column="25" lean-forward="true" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="25" />
           <folding />
         </state>
       </provider>
@@ -1028,7 +1027,7 @@
     <entry file="file://$PROJECT_DIR$/views/home.handlebars">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
-          <caret line="6" column="67" lean-forward="true" selection-start-line="6" selection-start-column="67" selection-end-line="6" selection-end-column="67" />
+          <caret line="6" column="69" lean-forward="false" selection-start-line="6" selection-start-column="69" selection-end-line="6" selection-end-column="69" />
           <folding />
         </state>
       </provider>
