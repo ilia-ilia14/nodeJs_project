@@ -22,7 +22,7 @@
 
         </div>
             <textarea id="textarea" class="form-control" placeholder="Enter message..."></textarea>
-            <button id="clear" class="btn btn-danger">Clear</button>
+            <!--  <button id="clear" class="btn btn-danger">Clear</button> -->
         </div>
     </div>
         <div>
@@ -95,8 +95,8 @@
            }
 
            // Connect to socket.io
-         // var socket = io.connect('http://127.0.0.1:3000');
-           var socket = io.connect();
+           var socket = io.connect('http://127.0.0.1:3000');
+           // var socket = io.connect();
 
            // Check for connection
            if(socket !== undefined){

@@ -80,14 +80,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-
-
-
-
-// Set Port
-//app.set('port', (process.env.PORT || 4000));
 module.exports  = app;
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
 app.use('/', routes);

@@ -3,6 +3,11 @@
  */
 var app = require('../app');
 let http = require('http');
+const EventEmitter = require('events');
+
+
+class MyEmitter extends EventEmitter {
+}
 
 
 var port = process.env.PORT || 3000;
@@ -36,19 +41,11 @@ router.get('/login',  function(req, res){
     res.render('login');
 });
 
+// home
+router.get('/home', function (req, res) {
+    res.render('home');
+});
 
-function isEmpty(obj) {
-    console.log(obj);
-    if(obj === undefined){
-        console.log(obj);
-        return true;
-    }
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key))
-            return false;
-    }
-    return true;
-}
 // Register User
 router.post('/register', function (req, res) {
     var name = req.body.name;
@@ -63,37 +60,46 @@ router.post('/register', function (req, res) {
     req.checkBody('email', 'Username is required').notEmpty();
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
-    // req.check("password", "password").matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, "i");
     req.check("password", "password should be at least 8 caracters").matches(/^(?=.*\d)[0-9a-zA-Z]{8,}$/, "i");
+    // req.check("password", "password").matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, "i");
 
-    /** CKECK IF USER EXISTS  NEEDS TO BE WORKED ON */
-    console.log(User.getUserByEmail(email) +" user*** " + email);
-    if(!isEmpty(User.getUserByEmail(email))){
-        var empty = '';
-        req.checkBody('empty', 'Username/Email is already taken').notEmpty();
-    }
+    User.getUserByEmail(email, function (err, user) {
+        //
+        var errors = req.validationErrors();
+        /*******************************************
+         *  check if errors exit if not make it an array
+         *  (validationErrors returns boolean if it is empty)
+         *  So we need to make it an array to avoid errors
+         *  *******************************************/
+        if (!errors) {
+            errors = [];
+        }
+        /* if user ixists put it in error array */
+        if (user) {
+            var errMsg = {'param': 'email', 'msg': "Email is already registered", 'value': "value"};
+            errors.push(errMsg);
+        }
+        /* check if error array is empty */
+        if (!errors.length == 0) {
+            res.render('register', {
+                errors: errors
+            });
+        } else {
 
-    var errors = req.validationErrors();
+            var newUser = new User({
+                name: name,
+                email: email,
+                username: username,
+                password: password
+            });
+            User.createUser(newUser, function (err, user) {
+                if (err) throw err;
+            });
 
-    if (errors) {
-        res.render('register', {
-            errors: errors
-        });
-    }else {
-        var newUser = new User({
-            name: name,
-            email: email,
-            username: username,
-            password: password
-        });
-        User.createUser(newUser, function (err, user) {
-            if (err) throw err;
-            // console.log(user);
-        });
-
-        req.flash('success_msg', 'Registration successful, please log in');
-        res.redirect('/users/login');
-    }
+            req.flash('success_msg', 'Registration successful, please log in');
+            res.redirect('/users/login');
+        }
+    });
 });
 
 
@@ -153,12 +159,8 @@ function handleUsers(socket, activeUsers){
         }
     }
     if(!found){
-        console.log("poped in");
         activeUsers.push({connectionId: socket.id, userName: userobject.username});
         io.emit('userOnline', userobject.username);
-        console.log('user online');
-        console.log(activeUsers);
-        console.log("END!");
     }
 }
 
@@ -167,23 +169,23 @@ function handleClientDisconnections(socket, activeUsers, allUsers){
     for (var i = activeUsers.length - 1; i >= 0; --i) {
         if (activeUsers[i].userName == userobject.username) {
             activeUsers.splice(i,1);
-            console.log("poped out");
         }
     }
     console.log(activeUsers);
     return activeUsers;
 }
 
+/*******************************************
+ *  gets the message from the user #1 and sends
+ *  it to user #2 through io connection id then
+ *  inserts it in the database
+ *  *******************************************/
 function hanglePrivateMessages(data, privateMessages) {
     let sender = data.sender;
     let receiver = data.receiver;
     let privateMsg = data.privateMessage;
-
-    console.log(data);
     let receiverObject = activeUsers.find(o => o.userName === receiver);
     let senderObject = activeUsers.find(o => o.userName === sender);
-
-
     try {
         Message.getMsgs(receiverObject.userName, function (err, msgs) {
             io.to(receiverObject.connectionId).emit('broadcastPrivateMsgs', msgs);
@@ -193,8 +195,6 @@ function hanglePrivateMessages(data, privateMessages) {
         console.error(err);
         console.log(data +" in users.js:152");
     }
-
-
     // send messages to sender
     try {
         Message.getMsgs(senderObject.userName, function (err, msgs) {
@@ -203,18 +203,17 @@ function hanglePrivateMessages(data, privateMessages) {
     }
     catch(err) {
             console.error(err);
-            console.log(data +" in users.js:152");
         }
-
-
-
     //Insert message
     privateMessages.insert({sender: sender, receiver: receiver, text: privateMsg, date: Date()}, function () {
     });
 
 }
 
-// THIS GETS USERS ONLY FIRST TIME WHEN SIGN IN HAPPENS
+
+/*******************************************
+ *  THIS GETS USERS ONLY FIRST TIME WHEN SIGN IN HAPPENS
+ *  *******************************************/
 function getPrivateMessages() {
     let individual = activeUsers.find(o => o.userName === userobject.username);
     Message.getMsgs(userobject.username, function (err, msgs) {
@@ -229,8 +228,10 @@ function getPrivateMessages() {
     });
 }
 
-///////////
-// Connect to Socket.io
+/*******************************************
+ *  Establishes new Socket.io connection evey
+ *  time new user logs in
+ *  *******************************************/
 io.on('connection', function(socket){
 
     //Update user list evey time new user signs in
@@ -246,18 +247,12 @@ io.on('connection', function(socket){
     socket.on('disconnect', function () {
        activeUsers =  handleClientDisconnections(socket, activeUsers);
         users.find().sort({_id:1}).toArray(function(err, res) {
-
-            //  socket.emit('Allusers', activeUsers, res);
             io.emit('Allusers', activeUsers, res);
-            console.log(activeUsers);
-            console.log("end1");
         });
-
     });
 
     // GET ACTIVE USERS AND SEND IT TO THE VIEW
     handleUsers(socket, activeUsers);
-
 
     let chatMessages = db.collection('chats');
     let PrivateMessages = db.collection('messages');
@@ -323,9 +318,4 @@ io.on('connection', function(socket){
         });
     });
 });
-
-
-
-///
-
 module.exports = router;
