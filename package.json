@@ -21,7 +21,6 @@
     "express-validator": "*",
     "mongodb": "*",
     "mongoose": "*",
-    "package-name": "^0.1.0",
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*",
