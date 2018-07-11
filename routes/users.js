@@ -165,13 +165,11 @@ function handleUsers(socket, activeUsers){
 }
 
 function handleClientDisconnections(socket, activeUsers, allUsers){
-    console.log('user disconnected');
     for (var i = activeUsers.length - 1; i >= 0; --i) {
         if (activeUsers[i].userName == userobject.username) {
             activeUsers.splice(i,1);
         }
     }
-    console.log(activeUsers);
     return activeUsers;
 }
 
@@ -193,7 +191,6 @@ function hanglePrivateMessages(data, privateMessages) {
     }
     catch(err) {
         console.error(err);
-        console.log(data +" in users.js:152");
     }
     // send messages to sender
     try {
@@ -217,8 +214,6 @@ function hanglePrivateMessages(data, privateMessages) {
 function getPrivateMessages() {
     let individual = activeUsers.find(o => o.userName === userobject.username);
     Message.getMsgs(userobject.username, function (err, msgs) {
-        //console.log(msgs);
-
         try {
             io.to(individual.connectionId).emit('broadcastPrivateMsgs', msgs);
         }
@@ -240,8 +235,6 @@ io.on('connection', function(socket){
 
         //  socket.emit('Allusers', activeUsers, res);
         io.emit('Allusers', activeUsers, res);
-        console.log(activeUsers );
-        console.log("END");
     });
 
     socket.on('disconnect', function () {
