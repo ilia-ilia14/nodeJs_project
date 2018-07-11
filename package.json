@@ -1,5 +1,5 @@
 {
-  "name": "loginapp",
+  "name": "chatapp",
   "version": "1.0.0",
   "description": "Chatroom Application",
   "main": "app.js",
@@ -26,5 +26,14 @@
     "passport-http": "*",
     "passport-local": "*",
     "socket.io": "^2.0.3"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilia-ilia14/nodeJs_project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ilia-ilia14/nodeJs_project/issues"
+  },
+  "homepage": "https://github.com/ilia-ilia14/nodeJs_project#readme"
 }
