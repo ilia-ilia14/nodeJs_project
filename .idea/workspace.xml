@@ -22,10 +22,8 @@
         <entry file="file://$PROJECT_DIR$/views/index.handlebars">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="187">
-              <caret line="23" column="38" lean-forward="false" selection-start-line="23" selection-start-column="38" selection-end-line="23" selection-end-column="38" />
-              <folding>
-                <element signature="n#style#0;n#small#0;n#p#0;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
+              <caret line="23" column="149" lean-forward="false" selection-start-line="23" selection-start-column="149" selection-end-line="23" selection-end-column="149" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -382,7 +380,7 @@
       <workItem from="1530428344770" duration="14769000" />
       <workItem from="1530830658021" duration="599000" />
       <workItem from="1530991704622" duration="9726000" />
-      <workItem from="1531251686014" duration="9349000" />
+      <workItem from="1531251686014" duration="9559000" />
     </task>
     <task id="LOCAL-00001" summary="trying to fix the structure">
       <created>1528298245789</created>
@@ -493,7 +491,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="193243000" />
+    <option name="totallyTimeSpent" value="193453000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -941,10 +939,8 @@
     <entry file="file://$PROJECT_DIR$/views/index.handlebars">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
-          <caret line="23" column="38" lean-forward="false" selection-start-line="23" selection-start-column="38" selection-end-line="23" selection-end-column="38" />
-          <folding>
-            <element signature="n#style#0;n#small#0;n#p#0;n#div#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
+          <caret line="23" column="149" lean-forward="false" selection-start-line="23" selection-start-column="149" selection-end-line="23" selection-end-column="149" />
+          <folding />
         </state>
       </provider>
     </entry>
